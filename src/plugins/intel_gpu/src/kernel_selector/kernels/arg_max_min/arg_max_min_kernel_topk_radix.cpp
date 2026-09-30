@@ -67,6 +67,7 @@ ParamsKey ArgMaxMinKernelTopKRadix::GetSupportedKey() const {
     k.EnableBatching();
     k.EnableTensorPitches();
     k.EnableTensorOffset();
+    k.EnableDynamicShapesSupport();
     return k;
 }
 
@@ -183,7 +184,7 @@ KernelsData ArgMaxMinKernelTopKRadix::GetKernelsData(const Params& params) const
     FillCLKernelData(kernel, dispatchData, params.engineInfo, kernelName, jit, entry_point,
                      EXE_MODE_DEFAULT, false, false, 1,
                      GetFusedPrimitiveInputsCount(params), orgParams.outputs_num,
-                     orgParams.is_shape_agnostic);
+                     orgParams.has_dynamic_tensors());
 
     // Add internal buffer for sortable keys (VALUES_NUM * sizeof(uint) per operation)
     const size_t sort_size = GetSortSize(orgParams);
